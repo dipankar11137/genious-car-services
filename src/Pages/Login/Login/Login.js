@@ -1,6 +1,7 @@
+import { async } from '@firebase/util';
 import React, { useRef } from 'react';
 import { Button, Form } from 'react-bootstrap';
-import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
+import { useSendPasswordResetEmail, useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { useLocation, useNavigate } from 'react-router-dom';
 import auth from '../../../firebase.init';
 import SocialLogin from '../SocialLogin/SocialLogin';
@@ -12,7 +13,8 @@ const Login = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const from = location.state?.from?.pathname || "/";
+    let from = location.state?.from?.pathname || "/";
+    let errorElement;
 
     const [
         signInWithEmailAndPassword,
@@ -20,6 +22,8 @@ const Login = () => {
         loading,
         error,
     ] = useSignInWithEmailAndPassword(auth);
+
+    const [sendPasswordResetEmail, sending] = useSendPasswordResetEmail(auth);
 
     const handleSubmit = event => {
         event.preventDefault();
@@ -32,8 +36,21 @@ const Login = () => {
     const navigateRegister = event => {
         navigate('/register');
     }
+    const resetPassword = async () => {
+        const email = emailRef.current.value;
+        await sendPasswordResetEmail(email);
+        alert('Sent email');
+    }
+
     if (user) {
         navigate(from, { replace: true });
+    }
+
+    if (error) {
+
+        errorElement = <p className='text-danger'>Error: {error?.message}</p>
+
+
     }
 
     return (
@@ -48,14 +65,14 @@ const Login = () => {
                 <Form.Group className="mb-3" controlId="formBasicPassword">
                     <Form.Control ref={passwordRef} type="password" placeholder="Password" required />
                 </Form.Group>
-                <Form.Group className="mb-3" controlId="formBasicCheckbox">
-                    <Form.Check type="checkbox" label="Check me out" />
-                </Form.Group>
-                <Button variant="primary" type="submit">
-                    Submit
+
+                <Button variant="primary w-50 d-block mx-auto mb-2" type="submit">
+                    Login
                 </Button>
             </Form>
-            <p>New to Genius Car? <span className='text-danger' type="submit" onClick={navigateRegister}>Please Register</span></p>
+            {errorElement}
+            <p>New to Genius Car? <span className='text-primary' type="submit" onClick={navigateRegister}>Please Register</span></p>
+            <p>Forget Password? <span className='text-primary' type="submit" onClick={resetPassword}>Reset Password</span></p>
             <SocialLogin></SocialLogin>
         </div>
     );
