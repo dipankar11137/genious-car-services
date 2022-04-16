@@ -4,6 +4,7 @@ import { useCreateUserWithEmailAndPassword, useUpdateProfile } from 'react-fireb
 import auth from '../../../firebase.init';
 import './Register.css';
 import SocialLogin from '../SocialLogin/SocialLogin';
+import Loading from '../../Shared/Loading/Loading';
 
 const Register = () => {
     const [agree, setAgree] = useState(false);
@@ -21,8 +22,9 @@ const Register = () => {
     const navigateLogin = () => {
         navigate('/login');
     }
-    if (user) {
-        navigate('/home');
+
+    if (loading || updating) {
+        return <Loading></Loading>
     }
 
     const handleRegister = async (event) => {
@@ -31,9 +33,11 @@ const Register = () => {
         const email = event.target.email.value;
         const password = event.target.password.value;
         // const agree = event.target.terms.checked;
-        if (agree) {
-            createUserWithEmailAndPassword(email, password);
-        }
+
+        await createUserWithEmailAndPassword(email, password);
+        await updateProfile({ displayName: name });
+        alert('Updated profile');
+        navigate('/home');
     }
 
     return (
