@@ -8,6 +8,7 @@ import Loading from '../../Shared/Loading/Loading';
 import SocialLogin from '../SocialLogin/SocialLogin';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import PageTitle from '../../Shared/PageTitle/PageTitle';
 
 const Login = () => {
 
@@ -62,11 +63,11 @@ const Login = () => {
 
         errorElement = <p className='text-danger'>Error: {error?.message}</p>
 
-
     }
 
     return (
         <div className='container w-50 mx-auto'>
+            <PageTitle title="Login"></PageTitle>
             <h2 className='text-primary text-center mt-2'>Please login</h2>
 
             <Form onSubmit={handleSubmit}>
