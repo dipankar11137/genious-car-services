@@ -2,11 +2,13 @@
 import { Route, Routes } from 'react-router-dom';
 import './App.css';
 import About from './Pages/About/About';
+import AddService from './Pages/AddService/AddService';
 import Checkout from './Pages/CheckOut/Checkout/Checkout';
 import Home from './Pages/Home/Home/Home';
 import Login from './Pages/Login/Login/Login';
 import Register from './Pages/Login/Register/Register';
 import RequiredAuth from './Pages/Login/RequiredAuth/RequiredAuth';
+import ManageServices from './Pages/ManageServices/ManageServices';
 import ServiceDetail from './Pages/ServiceDetail/ServiceDetail';
 import Footer from './Pages/Shared/Footer/Footer';
 import Header from './Pages/Shared/Header/Header';
@@ -30,6 +32,16 @@ function App() {
         <Route path="/checkout" element={
           <RequiredAuth>
             <Checkout></Checkout>
+          </RequiredAuth>
+        }></Route>
+        <Route path="/addservice" element={
+          <RequiredAuth>
+            <AddService></AddService>
+          </RequiredAuth>
+        }></Route>
+        <Route path="/manageservice" element={
+          <RequiredAuth>
+            <ManageServices></ManageServices>
           </RequiredAuth>
         }></Route>
         <Route path="*" element={<NotFound></NotFound>}></Route>
